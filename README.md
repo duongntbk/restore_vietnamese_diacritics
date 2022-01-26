@@ -68,10 +68,10 @@ transformer = TransformerModel(source_vectorization='result/source_vectorization
     target_vectorization='result/target_vectorization_layer_cont.pkl',
     model_path='result/restore_diacritic.keras')
     
-print(t.predict('co phai em la mua thu ha noi'))
-print(t.predict('em con nho hay em da quen'))
-print(t.predict('ha noi mua nay vang nhung con mua'))
-print(t.predict('dat nuoc toi thon tha giot dan bau'))
+print(transformer.predict('co phai em la mua thu ha noi'))
+print(transformer.predict('em con nho hay em da quen'))
+print(transformer.predict('ha noi mua nay vang nhung con mua'))
+print(transformer.predict('dat nuoc toi thon tha giot dan bau'))
 ```
 
 The code above should print the following to console.
