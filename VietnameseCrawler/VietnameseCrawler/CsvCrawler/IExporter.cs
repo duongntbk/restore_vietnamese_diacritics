@@ -5,6 +5,6 @@ namespace VietnameseCrawler.CsvCrawler
 {
     public interface IExporter
     {
-        Task WriteAsync(IAsyncEnumerable<string> data, string outputPath);
+        Task WriteAsync(IAsyncEnumerable<(string Original, string Stripped)> data, string outputPath);
     }
 }

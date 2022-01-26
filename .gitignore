@@ -35,5 +35,8 @@ bld/
 *.VisualState.xml
 TestResult.xml
 
+__pycache__/
 dataset/
 spa-eng/
+*.pkl
+*.keras

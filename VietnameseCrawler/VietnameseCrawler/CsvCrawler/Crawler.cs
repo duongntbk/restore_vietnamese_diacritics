@@ -13,23 +13,17 @@ namespace VietnameseCrawler.CsvCrawler
     {
         private readonly CsvConfiguration _csvConfig;
         private readonly Func<TRecord, bool> _verifyLineFunc;
-        private readonly HashSet<char> _borderChar;
-        private readonly char BLANK_SPACE = ' ';
+        
+        private readonly IFormatter _formatter;
 
-        public Crawler(CsvConfiguration csvConfig, Func<TRecord, bool> verifyLineFunc)
+        public Crawler(CsvConfiguration csvConfig, Func<TRecord, bool> verifyLineFunc, IFormatter formatter)
         {
             _csvConfig = csvConfig;
             _verifyLineFunc = verifyLineFunc;
-            _borderChar = new HashSet<char>
-            {
-                '.',
-                '?',
-                '!',
-                ';'
-            };
+            _formatter = formatter;
         }
 
-        public async IAsyncEnumerable<string> ReadAsync(string inputPath)
+        public async IAsyncEnumerable<(string Original, string Stripped)> ReadAsync(string inputPath)
         {
             using (var fs = File.Open(inputPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
@@ -43,42 +37,14 @@ namespace VietnameseCrawler.CsvCrawler
                     {
                         if (_verifyLineFunc(row))
                         {
-                            var lines = Split(row.Text);
-                            foreach (var line in lines)
+                            var formatted = _formatter.Format(row.Text);
+                            foreach (var (original, stripped) in formatted)
                             {
-                                yield return line;
+                                yield return (original, stripped);
                             }
                         }
                     }
                 }
-            }
-        }
-
-        private IEnumerable<string> Split(string text)
-        {
-            var len = text.Length;
-            var sb = new StringBuilder();
-
-            for (var i = 0; i < len; i++)
-            {
-                if (_borderChar.Contains(text[i]))
-                {
-                    while((i < len - 1) && text[i + 1] == BLANK_SPACE)
-                    {
-                        i++;
-                    }
-                    yield return sb.ToString();
-                    sb.Clear();
-                }
-                else
-                {
-                    sb.Append(text[i]);
-                }
-            }
-
-            if (sb.Length > 0)
-            {
-                yield return sb.ToString();
             }
         }
     }

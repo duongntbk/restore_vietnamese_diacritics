@@ -4,6 +4,6 @@ namespace VietnameseCrawler.CsvCrawler
 {
     public interface ICrawler
     {
-        IAsyncEnumerable<string> ReadAsync(string inputPath);
+        IAsyncEnumerable<(string Original, string Stripped)> ReadAsync(string inputPath);
     }
 }
