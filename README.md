@@ -1,5 +1,7 @@
 This is a Transformed based solution to restore Vietnamese diacritics from diacritics-less text. I also took inspiration from how machine translation works. Transformer related code is adopted from Chapter 11 of the book *Deep Learning with Python by Francois Chollot*, which can be found [here](https://github.com/fchollet/deep-learning-with-python-notebooks/blob/master/chapter11_part04_sequence-to-sequence-learning.ipynb).
 
+You can download the trained model and its vetorization files from [this](https://drive.google.com/drive/folders/1duBcp3YTsKeYz8xQThBsDjEUx3zRoLS3) link.
+
 You don't need to understand Vietnamese to use this repository, so please take a look. For more information, please see my blog at the link below.
 
 [https://duongnt.com/restore-vietnamese-diacritics](https://duongnt.com/restore-vietnamese-diacritics)
@@ -37,7 +39,8 @@ Create a `TransformerModel` object and begin training.
 from transformer_model import TransformerModel
 
 transformer = TransformerModel(source_vectorization=source_vectorization,
-    target_vectorization=target_vectorization)
+    target_vectorization=target_vectorization,
+    dense_dim=8192, num_heads=8, drop_out=0)
 
 transformer.build_model(optimizer="rmsprop",
     loss="sparse_categorical_crossentropy",
@@ -60,7 +63,13 @@ You can pass arguments to the constructor of `TransformerModel` to change its ar
 - *num_heads*: the number of attention heads in Transformer.
 - *drop_out*: the dropout rate.
 
-### Use the model to make inferences
+After 50 epochs, our the model achieved `94.26%` accuracy on the validation set and `94.05%` accuracy on the test set.
+
+<p align="center">
+    <img src = "./result/restore-vietnamese-diacritics-final-model.png">
+</p>
+
+### Use a trained model to make inferences
 
 To make inferences, we need both the model and the saved vectorization files.
 ```
@@ -86,7 +95,7 @@ hà nội mùa này vắng những cơn mưa
 
 We can continue training from a model and its corresponding vectorization files.
 ```
-from data_loader load_vectorization_from_disk
+from data_loader import load_vectorization_from_disk
 
 source_vectorization = load_vectorization_from_disk('result/source_vectorization_layer_cont.pkl')
 target_vectorization = load_vectorization_from_disk('result/target_vectorization_layer_cont.pkl')
